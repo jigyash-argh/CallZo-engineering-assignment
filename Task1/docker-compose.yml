@@ -18,9 +18,10 @@ services:
       - "8000:8080"
     depends_on:
       - db
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql://callzo_user:callzo_password@db:5432/callzo_usage
-      - WEBHOOK_SECRET=callzo_test_secret_change_me
+      - LOG_IGNORE_PATH=/favicon.ico
 
   simulator:
     image: meetrj/callzo-webhook-simulator
@@ -28,7 +29,7 @@ services:
     container_name: simulator
     depends_on:
       - api
-    command: ["--url", "http://api:8080/webhooks/calls", "--scenario", "bad_signature"]
+    command: ["--url", "http://api:8080/webhooks/calls", "--scenario", "duplicates"]
 
 volumes:
   postgres_data:
