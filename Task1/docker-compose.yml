@@ -29,7 +29,7 @@ services:
     container_name: simulator
     depends_on:
       - api
-    command: ["--url", "http://api:8080/webhooks/calls", "--scenario", "duplicates"]
+    command: ["--url", "http://api:8080/webhooks/calls", "--scenario", "all"]
 
 volumes:
   postgres_data:
