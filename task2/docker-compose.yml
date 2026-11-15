@@ -1,0 +1,7 @@
+services:
+  mock-api:
+    image: meetrj/callzo-mock-usage-api
+    platform: linux/amd64
+    container_name: mock-api
+    ports:
+      - "8001:8001"
