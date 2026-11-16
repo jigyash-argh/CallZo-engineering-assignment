@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Bake the API URL into the build so it connects to the mock-api container
-ENV VITE_API_BASE=http://mock-api:8001
+ENV VITE_API_BASE=http://localhost:8001
 RUN npm run build
 
 # Stage 2: Serve with Nginx

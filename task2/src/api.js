@@ -1,10 +1,7 @@
-// Vite uses import.meta.env to read environment variables
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 export async function fetchAccounts(params) {
   const url = new URL(`${API_BASE}/accounts`);
-  
-  // Attach filters like page or search directly to the URL
   Object.keys(params).forEach(key => {
     if (params[key]) url.searchParams.append(key, params[key]);
   });
@@ -33,12 +30,14 @@ export async function saveSettingsStep(id, step, data) {
   const res = await fetch(`${API_BASE}/accounts/${id}/settings/step/${step}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data })
+    // PUT THIS BACK: The backend strictly requires the { data } wrapper!
+    body: JSON.stringify({ data }) 
   });
   
   if (!res.ok) {
     const errorData = await res.json();
-    throw errorData.detail; // Returns the exact step that failed
+    // KEEP THIS: Safely falls back to the root object if 'detail' doesn't exist
+    throw errorData.detail || errorData; 
   }
   return res.json();
 }
@@ -47,7 +46,8 @@ export async function submitSettings(id) {
   const res = await fetch(`${API_BASE}/accounts/${id}/settings/submit`, { method: "POST" });
   if (!res.ok) {
     const errorData = await res.json();
-    throw errorData.detail;
+    // Fix: Safely fall back to the root object if 'detail' doesn't exist
+    throw errorData.detail || errorData;
   }
   return true;
 }
